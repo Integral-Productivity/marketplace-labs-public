@@ -1,0 +1,73 @@
+{
+  "name": "integral-productivity-labs-public",
+  "owner": {
+    "name": "Integral Productivity Tooling Team",
+    "email": "devtools@integralproductivity.com"
+  },
+  "plugins": [
+    {
+      "name": "metawork",
+      "source": {
+        "source": "github",
+        "repo": "Integral-Productivity/metawork-claude-plugin",
+        "ref": "main"
+      },
+      "description": "[Experimental] (Alpha/preview) Teach, run, set up, and coach the Meta Work methodology — structured intentional planning, perspective-maintenance, and monitoring across project, area, domain, and identity scopes."
+    },
+    {
+      "name": "lean-management",
+      "source": {
+        "source": "github",
+        "repo": "Integral-Productivity/lean-management-claude-plugin",
+        "ref": "stable"
+      },
+      "description": "[Domain] A lean management guru to help you continuously improve."
+    },
+    {
+      "name": "holacracy",
+      "source": {
+        "source": "github",
+        "repo": "Integral-Productivity/holacracy-claude-plugin",
+        "ref": "stable"
+      },
+      "description": "[Domain] Engage with Holacracy — Facilitator, Secretary, Lead Link, Rep Link co-pilots, a governance-aware operating frame, and the GlassFrog MCP connector."
+    },
+    {
+      "name": "model-framework",
+      "source": {
+        "source": "github",
+        "repo": "Integral-Productivity/model-framework-claude-plugin",
+        "ref": "main"
+      },
+      "description": "[Domain] Skills for integrating across major models and frameworks (Integral Theory / AQAL, Ego Development, Lean)."
+    },
+    {
+      "name": "software-architecture",
+      "source": {
+        "source": "github",
+        "repo": "Integral-Productivity/software-architecture-claude-plugin",
+        "ref": "v0.1.0"
+      },
+      "description": "[Domain] Adaptive and evolutionary software architecture practice — ADR capture, fitness functions, tech radar, multi-level governance, and Hard Parts trade-off analysis. Grounded in Neal Ford's Fundamentals + Hard Parts."
+    },
+    {
+      "name": "mattpocock-skills",
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills",
+        "ref": "aaf2453fbdfe7a15c07f11d861224f34ab4b53cb"
+      },
+      "description": "[Domain] Matt Pocock's \"Skills for Real Engineers\" — composable third-party engineering & productivity skills (diagnose, tdd, triage, to-prd, to-issues, prototype, grill-me, handoff, write-a-skill). Pinned to a commit SHA: the upstream repo has no stable branch or release tag."
+    },
+    {
+      "name": "compound-engineering",
+      "source": {
+        "source": "github",
+        "repo": "EveryInc/compound-engineering-plugin",
+        "ref": "compound-engineering-v3.30.5",
+        "sha": "50532b00de523980010d97fe950965b35382a3b7"
+      },
+      "description": "[Domain] Every's Compound Engineering plugin — plan, work, review and compound loops for AI-assisted engineering (third-party). Pinned to the commit of release tag compound-engineering-v3.30.5; bumps are reviewed PRs here, per devops-excellence ADR-097."
+    }
+  ]
+}

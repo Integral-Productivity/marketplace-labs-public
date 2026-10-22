@@ -1,0 +1,109 @@
+# Weekly: proposes a bump of each SHA-pinned third-party plugin to its newest
+# upstream release tag. See devops-excellence ADR-097, decision 4 (the
+# role-holder chose this "Release workflow" mechanism on 2026-10-15).
+#
+# It never merges. The branch is `bump/<plugin>`, never `claude/*`, so the
+# auto-merge reusable never arms on it; CODEOWNERS requests the human review.
+# A human reviews the upstream diff (linked in the PR body) and merges.
+#
+# Token: the enterprise policy stops GITHUB_TOKEN from opening PRs, and a PR
+# opened with GITHUB_TOKEN would not trigger `Check plugin pins` anyway. So the
+# PR is opened as the ip-automerge App, minted from the scoped
+# OP_AUTOMERGE_PUBLIC_TOKEN this public repo already holds (ADR-045). That is
+# the only App PEM this repo can read today. A dedicated bump identity is a
+# possible follow-up in ip-bots.
+
+name: Bump plugin pins
+
+on:
+  schedule:
+    - cron: '0 15 * * 1' # Mondays 15:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bump-pins
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+
+      - name: Unit tests
+        run: node --test test/*.test.mjs
+
+      - name: Find newer releases
+        id: find
+        run: node scripts/bump-pin.mjs .claude-plugin/marketplace.json
+
+      - name: Pin check on the proposed manifest
+        if: steps.find.outputs.bumps != '[]'
+        run: node scripts/check-external-pins.mjs
+
+      - name: Read PEM from 1Password
+        if: steps.find.outputs.bumps != '[]'
+        id: pem
+        uses: Integral-Productivity/reusable-workflows/.github/actions/read-pem-from-1p@b0caf389303ff150b6c99d618ca7730c5ce6f589 # v1.3.0
+        with:
+          op-service-account-token: ${{ secrets.OP_AUTOMERGE_PUBLIC_TOKEN }}
+          item-path: op://ip-automation-public/ip-automerge/private_key
+
+      - name: Mint App token
+        if: steps.find.outputs.bumps != '[]'
+        id: app
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.IP_AUTOMERGE_APP_CLIENT_ID }}
+          private-key: ${{ steps.pem.outputs.private-key }}
+
+      - name: Open or update the bump PR
+        if: steps.find.outputs.bumps != '[]'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          BUMPS: ${{ steps.find.outputs.bumps }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          # One plugin is tracked today; the loop keeps one branch per plugin.
+          echo "$BUMPS" | jq -c '.[]' | while read -r bump; do
+            name=$(jq -r .name <<<"$bump")
+            from_ref=$(jq -r .fromRef <<<"$bump"); from_sha=$(jq -r .fromSha <<<"$bump")
+            to_ref=$(jq -r .toRef <<<"$bump");     to_sha=$(jq -r .toSha <<<"$bump")
+            upstream=$(jq -r .repo <<<"$bump")
+            branch="bump/${name}"
+            title="chore(${name}): bump pin to ${to_ref}"
+
+            git config user.name "ip-automerge[bot]"
+            git config user.email "ip-automerge[bot]@users.noreply.github.com"
+            git checkout -B "$branch"
+            git add .claude-plugin/marketplace.json
+            git commit -m "$title" -m "Upstream: https://github.com/${upstream}/compare/${from_sha}...${to_sha}" -m "Per devops-excellence ADR-097, decision 4."
+            git push --force "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "HEAD:refs/heads/${branch}"
+
+            body=$(cat <<EOF
+          Before: \`${name}\` is pinned to \`${from_ref}\` (\`${from_sha}\`).
+
+          After: it is pinned to \`${to_ref}\` (\`${to_sha}\`), the commit that tag pointed to when this ran.
+
+          **Review the upstream diff before merging:** https://github.com/${upstream}/compare/${from_sha}...${to_sha}
+
+          How: the weekly \`Bump plugin pins\` workflow read the upstream release tags with \`git ls-remote\` and moved \`ref\` and \`sha\` together. It never merges. See devops-excellence ADR-097, decision 4.
+          EOF
+            )
+            existing=$(gh pr list --repo "$REPO" --head "$branch" --state open --json number --jq '.[0].number // empty')
+            if [ -n "$existing" ]; then
+              gh pr edit "$existing" --repo "$REPO" --title "$title" --body "$body"
+            else
+              gh pr create --repo "$REPO" --base main --head "$branch" --title "$title" --body "$body"
+            fi
+            git checkout -q -
+          done

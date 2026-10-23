@@ -31,7 +31,7 @@ Each plugin's category is a tag at the start of its description (for example `[E
 |---|---|---|
 | Experimental | `metawork` | [metawork-claude-plugin](https://github.com/Integral-Productivity/metawork-claude-plugin) |
 | Domain | `lean-management` | [lean-management-claude-plugin](https://github.com/Integral-Productivity/lean-management-claude-plugin) |
-| Domain | `holacracy` | [holacracy-claude-plugin](https://github.com/Integral-Productivity/holacracy-claude-plugin) |
+| Domain | `self-org` | [holacracy-claude-plugin](https://github.com/Integral-Productivity/holacracy-claude-plugin) |
 | Domain | `model-framework` | [model-framework-claude-plugin](https://github.com/Integral-Productivity/model-framework-claude-plugin) |
 | Domain | `software-architecture` | [software-architecture-claude-plugin](https://github.com/Integral-Productivity/software-architecture-claude-plugin) |
 | Domain | `mattpocock-skills` | [mattpocock/skills](https://github.com/mattpocock/skills) (third-party) |

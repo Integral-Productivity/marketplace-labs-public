@@ -24,7 +24,7 @@
       "description": "[Domain] A lean management guru to help you continuously improve."
     },
     {
-      "name": "holacracy",
+      "name": "self-org",
       "source": {
         "source": "github",
         "repo": "Integral-Productivity/holacracy-claude-plugin",

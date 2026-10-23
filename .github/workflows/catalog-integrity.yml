@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   integrity:
-    uses: Integral-Productivity/reusable-workflows/.github/workflows/reusable-catalog-integrity.yml@v1
+    uses: Integral-Productivity/reusable-workflows/.github/workflows/reusable-catalog-integrity.yml@6a9fb084f80b7af919eb2411f3dd5209031437b3 # v1.5.0
     with:
       catalog: labs
     secrets:

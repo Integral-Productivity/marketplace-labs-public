@@ -1,0 +1,34 @@
+# Catalog integrity for this public catalog (public plugin bundles plan, U5).
+#
+# Thin caller. The rules live in reusable-workflows
+# (scripts/public-bundle/integrity.mjs); this file only chooses the catalog.
+#
+#   audit        every pull request and push to main. Fails when a
+#                ./plugins/<name> folder has no passing receipt, a file changed
+#                after the check, or marketplace.json does not list exactly the
+#                folders. Entries with another source only warn. Make its check,
+#                "Catalog integrity", required on main.
+#   reclassify   weekly and on demand. Opens a removal pull request for any
+#                plugin whose source repo is no longer classified for this
+#                catalog.
+
+name: Catalog integrity
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integrity:
+    uses: Integral-Productivity/reusable-workflows/.github/workflows/reusable-catalog-integrity.yml@6a9fb084f80b7af919eb2411f3dd5209031437b3 # v1.5.0
+    with:
+      catalog: labs
+    secrets:
+      OP_RELEASER_PUBLIC_TOKEN: ${{ secrets.OP_RELEASER_PUBLIC_TOKEN }}

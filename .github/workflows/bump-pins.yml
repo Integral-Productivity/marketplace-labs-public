@@ -52,7 +52,7 @@ jobs:
       - name: Read PEM from 1Password
         if: steps.find.outputs.bumps != '[]'
         id: pem
-        uses: Integral-Productivity/reusable-workflows/.github/actions/read-pem-from-1p@b0caf389303ff150b6c99d618ca7730c5ce6f589 # v1.3.0
+        uses: Integral-Productivity/reusable-workflows/.github/actions/read-pem-from-1p@8c04e03324d85c1f0432890946fdd04d30d64325 # v1.6.0
         with:
           op-service-account-token: ${{ secrets.OP_AUTOMERGE_PUBLIC_TOKEN }}
           item-path: op://ip-automation-public/ip-automerge/private_key

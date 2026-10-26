@@ -1,8 +1,2 @@
 # Default code-owner. Tier 3 standard from devops-excellence (ADR-001).
 * @kraigparkinson
-
-# Plugin bundles are written only by the ip-releaser publish pull requests
-# (public plugin bundles plan, U4/U5). A change here from anyone else needs the
-# owner's review; the "Catalog integrity" check verifies every folder's receipt.
-/plugins/ @kraigparkinson
-/.claude-plugin/marketplace.json @kraigparkinson

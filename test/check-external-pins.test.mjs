@@ -37,8 +37,18 @@ test('external repo with a 40-character sha passes', () => {
   assert.deepEqual(findUnpinnedExternal(one({ source: 'github', repo: 'EveryInc/x', ref: 'v1', sha: SHA })), []);
 });
 
-test('external repo with a 40-character ref passes', () => {
-  assert.deepEqual(findUnpinnedExternal(one({ source: 'github', repo: 'mattpocock/skills', ref: SHA })), []);
+test('a commit in ref fails, because ref is cloned as a branch or tag', () => {
+  const problems = findUnpinnedExternal(one({ source: 'github', repo: 'mattpocock/skills', ref: SHA }));
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /move the commit to sha/);
+});
+
+test('a commit in ref fails for an org repo too', () => {
+  assert.equal(findUnpinnedExternal(one({ source: 'github', repo: 'Integral-Productivity/x', ref: SHA })).length, 1);
+});
+
+test('external repo pinned by sha alone passes', () => {
+  assert.deepEqual(findUnpinnedExternal(one({ source: 'github', repo: 'mattpocock/skills', sha: SHA })), []);
 });
 
 test('external url source without a sha fails', () => {

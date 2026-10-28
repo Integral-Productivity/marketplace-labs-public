@@ -17,10 +17,11 @@ function ownerOf(source) {
   return undefined; // no remote: a relative path inside this marketplace
 }
 
-// A commit pin is a 40-character `sha`. A 40-character `ref` is accepted too,
-// because `mattpocock-skills` was pinned that way before this check existed.
+// A commit pin is a 40-character `sha`. A commit in `ref` does not count:
+// Claude Code clones `ref` as a branch or tag (`git clone --branch`), so a
+// commit there fails every install ("Remote branch <sha> not found").
 function isCommitPinned(source) {
-  return COMMIT.test(source.sha ?? '') || COMMIT.test(source.ref ?? '');
+  return COMMIT.test(source.sha ?? '');
 }
 
 // Pure rule over a parsed marketplace.json. Returns one message per violation.
@@ -29,6 +30,13 @@ export function findUnpinnedExternal(manifest) {
   for (const plugin of manifest.plugins ?? []) {
     const { source } = plugin;
     if (!source || typeof source !== 'object') continue;
+    if (COMMIT.test(source.ref ?? '')) {
+      problems.push(
+        `${plugin.name}: ref ${source.ref} is a commit; ref takes a branch or tag, ` +
+          `so move the commit to sha`,
+      );
+      continue;
+    }
     const owner = ownerOf(source);
     if (owner === undefined || owner === ORG) continue;
     if (!isCommitPinned(source)) {

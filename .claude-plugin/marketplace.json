@@ -55,7 +55,7 @@
       "source": {
         "source": "github",
         "repo": "mattpocock/skills",
-        "ref": "aaf2453fbdfe7a15c07f11d861224f34ab4b53cb"
+        "sha": "aaf2453fbdfe7a15c07f11d861224f34ab4b53cb"
       },
       "description": "[Domain] Matt Pocock's \"Skills for Real Engineers\" — composable third-party engineering & productivity skills (diagnose, tdd, triage, to-prd, to-issues, prototype, grill-me, handoff, write-a-skill). Pinned to a commit SHA: the upstream repo has no stable branch or release tag."
     },

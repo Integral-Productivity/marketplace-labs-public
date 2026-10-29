@@ -46,7 +46,7 @@
       "source": {
         "source": "github",
         "repo": "Integral-Productivity/software-architecture-claude-plugin",
-        "ref": "v0.1.0"
+        "sha": "2e0dfebf79bc13e5e69b896cb7a164f1cefa2eaa"
       },
       "description": "[Domain] Adaptive and evolutionary software architecture practice — ADR capture, fitness functions, tech radar, multi-level governance, and Hard Parts trade-off analysis. Grounded in Neal Ford's Fundamentals + Hard Parts."
     },

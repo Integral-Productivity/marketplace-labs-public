@@ -64,10 +64,10 @@
       "source": {
         "source": "github",
         "repo": "EveryInc/compound-engineering-plugin",
-        "ref": "compound-engineering-v3.32.2",
-        "sha": "9f5b16fc617fb5bf4817c8f42537b626c17abd05"
+        "ref": "compound-engineering-v3.34.0",
+        "sha": "f1b249924c0e41b14974a4eeb89e91000a22e2c3"
       },
-      "description": "[Domain] Every's Compound Engineering plugin — plan, work, review and compound loops for AI-assisted engineering (third-party). Pinned to the commit of release tag compound-engineering-v3.32.2; bumps are reviewed PRs here, per devops-excellence ADR-097."
+      "description": "[Domain] Every's Compound Engineering plugin — plan, work, review and compound loops for AI-assisted engineering (third-party). Pinned to the commit of release tag compound-engineering-v3.34.0; bumps are reviewed PRs here, per devops-excellence ADR-097."
     }
   ]
 }
